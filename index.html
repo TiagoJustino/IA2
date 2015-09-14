@@ -1,29 +1,12 @@
+<!DOCTYPE html>
 <html>
-	<head>
-		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-		<script>
-			var socket = io();
-			//When we get the 'data" message...
-			socket.on('to browser', function(data)
-			{
-				//Add the message to the #messages list
-				$('#messages').append($('<li>').text(data));
-			});
-
-			//Also send some data back once per second
-			window.setInterval(
-				function()
-				{
-					var msg = "Hello: " + Math.random();
-					console.log(msg);
-					socket.emit('to serial', msg);
-				},
-				1000
-			);
-		</script>
-	</head>
-	<body>
-		<ul id="messages"></ul>
-	</body>
+  <head>
+    <script typs="text/javascript" src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/paper.js"></script>
+    <script type="text/paperscript" src="js/index.js" canvas="canvas"></script>
+  </head>
+  <body>
+    <canvas id="canvas" resize="true" width="1696" height="540"></canvas>
+  </body>
 </html>

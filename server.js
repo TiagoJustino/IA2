@@ -9,6 +9,9 @@ var serial;
 
 //When a request come into the server for / give the client the file index.html
 app.get('/', function(req, res){res.sendFile('./index.html', { root: __dirname});});
+app.get('/js/jquery.js', function(req, res){res.sendFile('./js/jquery.js', { root: __dirname});});
+app.get('/js/paper.js', function(req, res){res.sendFile('./js/paper.js', { root: __dirname});});
+app.get('/js/index.js', function(req, res){res.sendFile('./js/index.js', { root: __dirname});});
 
 //Listen for incoming connections
 http.listen(3000, function(){console.log("listening on port 3000");});
