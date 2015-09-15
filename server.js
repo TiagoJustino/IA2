@@ -12,6 +12,10 @@ app.get('/', function(req, res){res.sendFile('./index.html', { root: __dirname})
 app.get('/js/jquery.js', function(req, res){res.sendFile('./js/jquery.js', { root: __dirname});});
 app.get('/js/paper.js', function(req, res){res.sendFile('./js/paper.js', { root: __dirname});});
 app.get('/js/index.js', function(req, res){res.sendFile('./js/index.js', { root: __dirname});});
+app.get('/coolview.html', function(req, res){res.sendFile('./coolview.html', { root: __dirname});});
+app.get('/js/coolview.js', function(req, res){res.sendFile('./js/coolview.js', { root: __dirname});});
+app.get('/img/photon.png', function(req, res){res.sendFile('./img/photon.png', { root: __dirname});});
+app.get('/img/nyan.png', function(req, res){res.sendFile('./img/nyan.png', { root: __dirname});});
 
 //Listen for incoming connections
 http.listen(3000, function(){console.log("listening on port 3000");});

@@ -8,6 +8,7 @@ var startTime;
 var color = ['red', 'blue', 'brown', 'purple'];
 var offset = 40;
 var maxTime = 160;
+var source = 'serial';
 
 // modified from http://stackoverflow.com/questions/1584370/how-to-merge-two-arrays-in-javascript-and-de-duplicate-items
 var arrayUnique = function (array) {
@@ -227,10 +228,14 @@ var onFetchedData = function( data ) {
     updateGraph();
   }
   values = data.split(':');
-  for(i = 0; i < values.length; i++) {
+  for(i = 0; i < 4; i++) {
     plotData(time, Math.floor(parseInt(values[i])/10), i);
   }
   view.update(true);
+}
+
+var onFetchedDataFromCloud = function( data ) {
+  onFetchedData(JSON.parse(data.data).data);
 }
 
 var getSeconds = function() {
@@ -240,3 +245,23 @@ var getSeconds = function() {
 updateGraph();
 var socket = io();
 socket.on('to browser', onFetchedData);
+var eventSource = null;
+
+$(document).ready(function(){
+  $('input:radio').change( function(){
+    source = this.value;
+    if(source === 'serial') { 
+      socket.on('to browser', onFetchedData);
+      if(eventSource) {
+        eventSource.removeEventListener('accelData', onFetchedDataFromCloud);
+      }
+    } else if (source === 'cloud') {
+      socket.removeListener('to browser', onFetchedData);
+      var token = $('#token').val();
+      var deviceid = $('#deviceid').val();
+      var url = "https://api.spark.io/v1/devices/" + deviceid + "/events/?access_token=" + token;
+      eventSource = new EventSource(url);
+      eventSource.addEventListener('accelData', onFetchedDataFromCloud);
+    }
+  });
+});
