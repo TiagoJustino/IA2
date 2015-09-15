@@ -248,6 +248,13 @@ socket.on('to browser', onFetchedData);
 var eventSource = null;
 
 $(document).ready(function(){
+  $('#eventButton').click(function() {
+    var token = $('#token').val();
+    var deviceid = $('#deviceid').val();
+    var url = 'https://api.spark.io/v1/devices/' + deviceid + '/cloudevent/?access_token=' + token;
+    console.log(url);
+    $.post(url, {"args": "1"});
+  });
   $('input:radio').change( function(){
     source = this.value;
     if(source === 'serial') { 

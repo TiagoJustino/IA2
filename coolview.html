@@ -7,6 +7,13 @@
     <script type="text/paperscript" src="js/coolview.js" canvas="canvas"></script>
   </head>
   <body>
-    <canvas id="canvas" resize="true" width="540" height="540"></canvas>
+    <canvas id="canvas" resize="true" width="540" height="540"></canvas><br/>
+    Token: <input type="text", id="token" value="5ac0c86fbff16549db96fc76e809d6432299a775"></input><br/>
+    Device Id: <input type="text", id="deviceid" value="390042001547343339383037"></input><br/>
+    <form action="">
+      <input type="radio" name="source" value="serial" checked="true">Serial
+      <input type="radio" name="source" value="cloud">Cloud
+    </form><br/>
+    <button id="eventButton">Send Event</button>
   </body>
 </html>

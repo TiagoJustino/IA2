@@ -12,13 +12,13 @@ nyan.position = new Point(-100, middleY);
 
 var active = photon;
 
-var switchActive = function() {
-  if(active == photon) {
-    nyan.position.x = photon.position.x;
+var setAvatar = function(avatar) {
+  if(avatar == 'nyan') {
+    nyan.position.x = active.position.x;
     photon.position.x = -100;
     active = nyan;
   } else {
-    photon.position.x = nyan.position.x;
+    photon.position.x = active.position.x;
     nyan.position.x = -100;
     active = photon;
   }
@@ -49,8 +49,12 @@ var onFrame = function(event) {
   colorVal = current.light / 4000;
   background.fillColor = new Color(colorVal, colorVal, colorVal);
 
-  if(current.tap > 0 && newData) {
-    switchActive();
+  if(newData) {
+    if(current.nyan > 0) {
+      setAvatar('nyan');
+    } else {
+      setAvatar('photon');
+    }
   }
   newData = false;
 };
@@ -63,10 +67,41 @@ var onFetchedData = function( data ) {
     z: parseInt(values[2]),
     light: parseInt(values[3]),
     orientation: values[4],
-    tap: parseInt(values[5])
+    nyan: parseInt(values[5])
   };
   newData = true;
 }
 
+var onFetchedDataFromCloud = function( data ) {
+  onFetchedData(JSON.parse(data.data).data);
+}
+
 var socket = io();
 socket.on('to browser', onFetchedData);
+var eventSource = null;
+
+$(document).ready(function(){
+  $('#eventButton').click(function() {
+    var token = $('#token').val();
+    var deviceid = $('#deviceid').val();
+    var url = 'https://api.spark.io/v1/devices/' + deviceid + '/cloudevent/?access_token=' + token;
+    console.log(url);
+    $.post(url, {"args": "1"});
+  });
+  $('input:radio').change( function(){
+    source = this.value;
+    if(source === 'serial') { 
+      socket.on('to browser', onFetchedData);
+      if(eventSource) {
+        eventSource.removeEventListener('accelData', onFetchedDataFromCloud);
+      }
+    } else if (source === 'cloud') {
+      socket.removeListener('to browser', onFetchedData);
+      var token = $('#token').val();
+      var deviceid = $('#deviceid').val();
+      var url = "https://api.spark.io/v1/devices/" + deviceid + "/events/?access_token=" + token;
+      eventSource = new EventSource(url);
+      eventSource.addEventListener('accelData', onFetchedDataFromCloud);
+    }
+  });
+});
