@@ -1,19 +1,48 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script typs="text/javascript" src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script type="text/javascript" src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/paper.js"></script>
     <script type="text/paperscript" src="js/coolview.js" canvas="canvas"></script>
   </head>
   <body>
-    <canvas id="canvas" resize="true" width="540" height="540"></canvas><br/>
-    Token: <input type="text", id="token" value="5ac0c86fbff16549db96fc76e809d6432299a775"></input><br/>
-    Device Id: <input type="text", id="deviceid" value="390042001547343339383037"></input><br/>
-    <form action="">
-      <input type="radio" name="source" value="serial" checked="true">Serial
-      <input type="radio" name="source" value="cloud">Cloud
-    </form><br/>
-    <button id="eventButton">Send Event</button>
+    <div style="float:left;">
+      <canvas id="canvas" resize="true" width="540" height="540"></canvas><br/>
+    </div>
+
+    <div style="width:540px; float:left;">
+      <fieldset>
+        <legend>Choose Source</legend>
+        Token: <input type="text", id="token" value="5ac0c86fbff16549db96fc76e809d6432299a775"></input><br/>
+        Device Id: <input type="text", id="deviceid" value="390042001547343339383037"></input><br/>
+        <form action="">
+          <input type="radio" name="source" value="serial">Serial
+          <input type="radio" name="source" value="cloud" checked="true">Cloud
+        </form><br/>
+      </fieldset>
+
+
+      <fieldset>
+        <legend>Publish Event</legend>
+        Event Value: <input type="number" id="eventValue" value="0" min="-127" max="127"></input>
+        <button id="eventButton">Send Event</button> <br/>
+      </fieldset>
+
+      <fieldset>
+        <legend>Call Function</legend>
+        <div style="float:left;">
+          <form action="">
+            <input type="radio" name="mode" value="silent">Silent
+            <input type="radio" name="mode" value="orientation" checked="true">Orientation
+            <input type="radio" name="mode" value="musical">Musical
+          </form>
+        </div>
+        <div style="float:left;">
+          <button id="modeButton">Set Mode</button>
+        </div>
+      </fieldset>
+    </div>
+
   </body>
 </html>

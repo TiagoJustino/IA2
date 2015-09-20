@@ -223,6 +223,7 @@ var updateGraph = function() {
 }
 
 var onFetchedData = function( data ) {
+  console.log('fetched', data);
   time = getSeconds();
   if(time - startTime > maxTime) {
     updateGraph();
@@ -235,6 +236,7 @@ var onFetchedData = function( data ) {
 }
 
 var onFetchedDataFromCloud = function( data ) {
+  console.log('data from cloud');
   onFetchedData(JSON.parse(data.data).data);
 }
 
@@ -243,32 +245,29 @@ var getSeconds = function() {
 }
 
 updateGraph();
-var socket = io();
-socket.on('to browser', onFetchedData);
-var eventSource = null;
 
-$(document).ready(function(){
-  $('#eventButton').click(function() {
+var socket = io();
+var url = "https://api.spark.io/v1/devices/" + $('#deviceid').val() + "/events/?access_token=" + $('#token').val();
+var eventSource = new EventSource(url);
+eventSource.addEventListener('accelData', onFetchedDataFromCloud);
+
+var onSourceRadioChange = function() {
+  source = this.value;
+  if(source === 'serial') { 
+    socket.on('to browser', onFetchedData);
+    if(eventSource) {
+      eventSource.removeEventListener('accelData', onFetchedDataFromCloud);
+    }
+  } else if (source === 'cloud') {
+    socket.removeListener('to browser', onFetchedData);
     var token = $('#token').val();
     var deviceid = $('#deviceid').val();
-    var url = 'https://api.spark.io/v1/devices/' + deviceid + '/cloudevent/?access_token=' + token;
-    console.log(url);
-    $.post(url, {"args": "1"});
-  });
-  $('input:radio').change( function(){
-    source = this.value;
-    if(source === 'serial') { 
-      socket.on('to browser', onFetchedData);
-      if(eventSource) {
-        eventSource.removeEventListener('accelData', onFetchedDataFromCloud);
-      }
-    } else if (source === 'cloud') {
-      socket.removeListener('to browser', onFetchedData);
-      var token = $('#token').val();
-      var deviceid = $('#deviceid').val();
-      var url = "https://api.spark.io/v1/devices/" + deviceid + "/events/?access_token=" + token;
-      eventSource = new EventSource(url);
-      eventSource.addEventListener('accelData', onFetchedDataFromCloud);
-    }
-  });
+    var url = "https://api.spark.io/v1/devices/" + deviceid + "/events/?access_token=" + token;
+    eventSource = new EventSource(url);
+    eventSource.addEventListener('accelData', onFetchedDataFromCloud);
+  }
+};
+
+$(document).ready(function(){
+  $('input[name=source]:radio').change(onSourceRadioChange);
 });

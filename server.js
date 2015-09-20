@@ -58,11 +58,13 @@ io.sockets.on('connection',
 
 exec('particle serial list', function(error, stdout, stderr) {
   var devName = stdout.split('\n')[1].split(' - ')[0];
-  console.log(devName);
+  if(devName) {
+    console.log(devName);
 
-  //Hook up the serial port
-  serial = new SerialPort( devName,
-														{parser: serialport.parsers.readline('\n')});
-  //When the serial port is successfully opened...
-  serial.on('open', onSerialOpen);
+    //Hook up the serial port
+    serial = new SerialPort( devName,
+                              {parser: serialport.parsers.readline('\n')});
+    //When the serial port is successfully opened...
+    serial.on('open', onSerialOpen);
+  }
 });
