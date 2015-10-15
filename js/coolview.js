@@ -68,8 +68,8 @@ var onFetchedData = function( data ) {
     z: parseInt(values[2].trim()),
     light: parseInt(values[3].trim()),
     orientation: values[4].trim(),
-    nyan: parseInt(values[5].trim())
-    xangle: parseInt(values[6].trim())
+    nyan: parseInt(values[5].trim()),
+    xangle: parseInt(values[6].trim()),
     yangle: parseInt(values[7].trim())
   };
   $('#xangle').text(current.xangle);
