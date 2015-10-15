@@ -63,13 +63,17 @@ var onFetchedData = function( data ) {
   console.log('fetched', data);
   values = data.split(':');
   current = {
-    x: parseInt(values[0]),
-    y: parseInt(values[1]),
-    z: parseInt(values[2]),
-    light: parseInt(values[3]),
-    orientation: values[4],
-    nyan: parseInt(values[5])
+    x: parseInt(values[0].trim()),
+    y: parseInt(values[1].trim()),
+    z: parseInt(values[2].trim()),
+    light: parseInt(values[3].trim()),
+    orientation: values[4].trim(),
+    nyan: parseInt(values[5].trim())
+    xangle: parseInt(values[6].trim())
+    yangle: parseInt(values[7].trim())
   };
+  $('#xangle').text(current.xangle);
+  $('#yangle').text(current.yangle);
   newData = true;
 }
 
